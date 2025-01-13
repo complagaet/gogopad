@@ -1,179 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weather and Info App</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  </head>
-  <body>
-    <header>
-      <h1>Weather and Info App</h1>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gogopad</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+<header class="app-header">
+  <div class="container">
+    <h1 class="app-title">gogopad</h1>
+    <nav>
+      <ul class="nav-list">
+        <li><a href="#weather-section">Weather</a></li>
+        <li><a href="#map-section">Map</a></li>
+        <li><a href="#facts-section">Facts</a></li>
+        <li><a href="#timezone-section">Timezone</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-    <main>
-      <!-- Weather Section -->
-      <section id="weather-section">
-        <h2>Weather Information</h2>
-        <form id="weather-form">
-          <label for="city">Enter City:</label>
-          <input type="text" id="city" name="city" required />
-          <button type="submit">Get Weather</button>
-        </form>
-        <div id="weather-result"></div>
-      </section>
+<main class="app-main">
+  <!-- Weather Section -->
+  <section id="weather-section" class="section weather-section">
+    <div class="container">
+      <h2 class="section-title">🌦 Weather Information</h2>
+      <form id="weather-form" class="form">
+        <label for="city" class="form-label">Enter City:</label>
+        <input
+                type="text"
+                id="city"
+                name="city"
+                class="form-input"
+                placeholder="e.g., London"
+                required
+        />
+        <button type="submit" class="btn">Get Weather</button>
+      </form>
+      <div id="weather-result" class="result"></div>
+    </div>
+  </section>
 
-      <!-- Map Section -->
-      <section id="map-section">
-        <h2>City Location</h2>
-        <div id="map" style="height: 400px"></div>
-      </section>
+  <!-- Map Section -->
+  <section id="map-section" class="section map-section">
+    <div class="container">
+      <h2 class="section-title">🗺 City Location</h2>
+      <div id="map" class="map"></div>
+    </div>
+  </section>
 
-      <!-- Facts Section -->
-      <section id="facts-section">
-        <h2>Random Facts</h2>
-        <button id="get-fact-button">Get Random Fact</button>
-        <div id="facts-result"></div>
-      </section>
+  <!-- Facts Section -->
+  <section id="facts-section" class="section facts-section">
+    <div class="container">
+      <h2 class="section-title">🔍 Random Facts</h2>
+      <button id="get-fact-button" class="btn">Get Random Fact</button>
+      <div id="facts-result" class="result"></div>
+    </div>
+  </section>
 
-      <!-- Timezone Section -->
-      <section id="timezone-section">
-        <h2>Timezone Information</h2>
-        <form id="timezone-form">
-          <label for="city-timezone">Enter City:</label>
-          <input type="text" id="city-timezone" name="city-timezone" required />
-          <button type="submit">Get Timezone</button>
-        </form>
-        <div id="timezone-result"></div>
-      </section>
-    </main>
+  <!-- Timezone Section -->
+  <section id="timezone-section" class="section timezone-section">
+    <div class="container">
+      <h2 class="section-title">🕒 Timezone Information</h2>
+      <form id="timezone-form" class="form">
+        <label for="city-timezone" class="form-label">Enter City:</label>
+        <input
+                type="text"
+                id="city-timezone"
+                name="city-timezone"
+                class="form-input"
+                placeholder="e.g., Tokyo"
+                required
+        />
+        <button type="submit" class="btn">Get Timezone</button>
+      </form>
+      <div id="timezone-result" class="result"></div>
+    </div>
+  </section>
+</main>
 
-    <footer>
-      <p>&copy; SE - 2331 Ussenov Tamerlan</p>
-    </footer>
+<footer class="app-footer">
+  <div class="container">
+    <p>Pavel Lukoyanov SE-2331</p>
+  </div>
+</footer>
 
-    <script>
-      let map;
+<style>
+  /* Base Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-      // Fetch and display weather data
-      document
-        .getElementById("weather-form")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const city = document.getElementById("city").value;
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f9;
+    color: #333;
+    overflow-x: hidden;
+  }
 
-          try {
-            // Fetch weather data
-            const weatherResponse = await fetch(`/api/weather?city=${city}`);
-            const weatherData = await weatherResponse.json();
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
-            if (weatherData.error) {
-              document.getElementById(
-                "weather-result"
-              ).innerHTML = `<p>Error: ${weatherData.error}</p>`;
-            } else {
-              document.getElementById("weather-result").innerHTML = `
-                        <p>Temperature: ${weatherData.temperature}°C</p>
-                        <p>Description: ${weatherData.description}</p>
-                        <p><img src="${weatherData.icon}" alt="${weatherData.description}" /></p>
-                        <p>Feels Like: ${weatherData.feels_like}°C</p>
-                        <p>Humidity: ${weatherData.humidity}%</p>
-                        <p>Pressure: ${weatherData.pressure} hPa</p>
-                        <p>Wind Speed: ${weatherData.wind_speed} m/s</p>
-                        <p>Rain Volume (last 1 hour): ${weatherData.rain_volume} mm</p>
-                        <p>Country Code: ${weatherData.country_code}</p>
-                    `;
-            }
+  .app-header {
+    background-color: #4caf50;
+    color: white;
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+  }
 
-            // Fetch geocode data and update the map
-            const geocodeResponse = await fetch(`/api/geocode?city=${city}`);
-            const geocodeData = await geocodeResponse.json();
+  .app-title {
+    text-align: center;
+    font-size: 2rem;
+  }
 
-            if (geocodeData.error) {
-              console.error("Error fetching geocode data:", geocodeData.error);
-            } else {
-              const lat = geocodeData.lat;
-              const lon = geocodeData.lon;
+  .nav-list {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 0.5rem;
+  }
 
-              if (map) {
-                map.remove();
-              }
-              map = L.map("map").setView([lat, lon], 10);
-              L.tileLayer(
-                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              ).addTo(map);
-              L.marker([lat, lon])
-                .addTo(map)
-                .bindPopup(`<b>${city}</b><br>Lat: ${lat}, Lon: ${lon}`)
-                .openPopup();
-            }
-          } catch (error) {
-            console.error("Error fetching weather data:", error);
-            document.getElementById(
-              "weather-result"
-            ).innerHTML = `<p>Error fetching weather data</p>`;
-          }
-        });
+  .nav-list li {
+    margin: 0 1rem;
+  }
 
-      // Fetch random facts
-      document
-        .getElementById("get-fact-button")
-        .addEventListener("click", async () => {
-          try {
-            const factResponse = await fetch("/api/facts");
-            const factData = await factResponse.json();
+  .nav-list a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
 
-            if (factData.error) {
-              document.getElementById(
-                "facts-result"
-              ).innerHTML = `<p>Error: ${factData.error}</p>`;
-            } else {
-              document.getElementById(
-                "facts-result"
-              ).innerHTML = `<p>${factData[0].fact}</p>`;
-            }
-          } catch (error) {
-            console.error("Error fetching facts:", error);
-            document.getElementById(
-              "facts-result"
-            ).innerHTML = `<p>Error fetching facts</p>`;
-          }
-        });
+  .section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
 
-      // Fetch timezone data
-      document
-        .getElementById("timezone-form")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const city = document.getElementById("city-timezone").value;
+  .section-title {
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.8rem;
+    color: #4caf50;
+  }
 
-          try {
-            const timezoneResponse = await fetch(`/api/timezone?city=${city}`);
-            const timezoneData = await timezoneResponse.json();
+  .form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
 
-            if (timezoneData.error) {
-              document.getElementById(
-                "timezone-result"
-              ).innerHTML = `<p>Error: ${timezoneData.error}</p>`;
-            } else {
-              document.getElementById("timezone-result").innerHTML = `
-                <p>City: ${timezoneData.city}</p>
-                <p>Timezone: ${timezoneData.timezone}</p>
-                <p>UTC Offset: ${timezoneData.utc_offset}</p>
-            `;
-            }
-          } catch (error) {
-            console.error("Error fetching timezone data:", error);
-            document.getElementById(
-              "timezone-result"
-            ).innerHTML = `<p>Error fetching timezone data</p>`;
-          }
-        });
-    </script>
-  </body>
+  .form-label {
+    flex-basis: 100%;
+    text-align: center;
+  }
+
+  .form-input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+
+  .btn:hover {
+    background-color: #45a049;
+  }
+
+  .result {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .map {
+    height: 400px;
+    border-radius: 5px;
+  }
+
+  .app-footer {
+    text-align: center;
+    background-color: #4caf50;
+    color: white;
+    padding: 1rem 0;
+  }
+</style>
+<script src="JS/main.js"></script>
+</body>
 </html>
