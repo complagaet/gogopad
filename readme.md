@@ -24,12 +24,6 @@ Gogopad is a dynamic web application that provides weather information, city loc
 - **Map Integration**: Leaflet.js
 - **API Integration**: Custom backend APIs (for weather, geocode, facts, and timezone data)
 
-## File Structure
-
-- `index.html`: The main HTML file containing the structure and embedded styles for the application.
-- `JS/main.js`: Contains the JavaScript code for interacting with APIs and rendering dynamic content.
-- `CSS/main.css`: Not used as all styles are embedded in the HTML file for standalone functionality.
-
 ## Setup Instructions
 
 1. **Prerequisites**:
