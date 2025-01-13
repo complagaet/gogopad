@@ -7,10 +7,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Использование ключей из .env
-const OPENWEATHER_API_KEY = "";
-const FACTS_API_KEY = "";
-const OPENCAGE_API_KEY = "";
-const TIMEZONE_API_KEY = "";
+const OPENWEATHER_API_KEY = process.env.OPENWEATHER_API_KEY;
+const FACTS_API_KEY = process.env.FACTS_API_KEY;
+const OPENCAGE_API_KEY = process.env.OPENCAGE_API_KEY;
+const TIMEZONE_API_KEY = process.env.TIMEZONE_API_KEY;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
